@@ -3,9 +3,11 @@ php-simple-mock
 
 Create PHPUnit Mocks without pain.
 
+Tested with: PHP 5.3.6 and PHPUnit 3.5.5
+
 <!-- INSERT: "tests/ExampleTest.php" -->
 tests/ExampleTest.php
----------------------
+---
 ```php
 <?php
 
