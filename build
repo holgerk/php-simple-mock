@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+# <!-- INSERT: "tests/ExampleTest.php" -->
+# <!-- /INSERT -->
+readme = 'README.md'
+insert_rgx = /(<!-- INSERT: "([^"]+)" -->).*?(<!-- \/INSERT -->)/m
+old_readme_content = File.read(readme)
+File.open(readme, 'w') do |fh|
+    fh << old_readme_content.gsub(insert_rgx)  do
+        $1 + "\n#{$2}\n---\n```php\n" + File.read($2).strip + "\n```\n" + $3
+    end
+end
