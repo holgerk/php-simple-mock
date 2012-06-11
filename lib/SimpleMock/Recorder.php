@@ -4,9 +4,9 @@ require_once __DIR__ . '/ExceptionExpection.php';
 
 class SimpleMock_Recorder {
 
-    public function __construct($testCase, $class) {
+    public function __construct($testCase, $arguments) {
         $this->testCase = $testCase;
-        $this->class = $class;
+        $this->phpunitGetMockArguments = $arguments;
         $this->methods = array();
         $this->explicitInvocationCounts = array();
         $this->args = array();
@@ -42,7 +42,7 @@ class SimpleMock_Recorder {
     }
 
     public function create() {
-        $simpleMock = $this->testCase->getMock($this->class, $this->methods);
+        $simpleMock = $this->instantiateMock();
         foreach ($this->methods as $method) {
             $expectedInvocationCount = $this->expectedInvocationCount($method);
             if ($expectedInvocationCount == 0) {
@@ -66,6 +66,13 @@ class SimpleMock_Recorder {
         }
 
         return $simpleMock;
+    }
+
+    protected function instantiateMock() {
+        array_splice($this->phpunitGetMockArguments, 1, 0, array($this->methods));
+        return call_user_func_array(
+            array($this->testCase, 'getMock'),
+            $this->phpunitGetMockArguments);
     }
 
     protected function currentMethod() {
