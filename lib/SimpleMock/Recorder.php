@@ -12,6 +12,12 @@ class SimpleMock_Recorder {
         $this->args = array();
         $this->returns = array();
         $this->invocationNumber = 0;
+
+        if (count($this->phpunitGetMockArguments) == 1) {
+            $this->phpunitGetMockArguments[] = array(); // constructor args
+            $this->phpunitGetMockArguments[] = '';      // mock class name
+            $this->phpunitGetMockArguments[] = false;   // call constructor
+        }
     }
 
     public function expects($method) {

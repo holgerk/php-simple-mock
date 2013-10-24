@@ -18,17 +18,17 @@ class SimpleMockParameterTest extends SimpleMock_TestCase {
 
     public function testParamForwarding() {
         $this->simpleMock('SomeClass')->create();
-        $this->assertEquals(array('SomeClass', array()), $this->receivedParams);
+        $this->assertEquals(array('SomeClass', array(), array(), '', false), $this->receivedParams);
     }
 
     public function testParamForwardingWithMethods() {
         $this->simpleMock('SomeClass')->expects('m1')->expects('m2')->create();
-        $this->assertEquals(array('SomeClass', array('m1', 'm2')), $this->receivedParams);
+        $this->assertEquals(array('SomeClass', array('m1', 'm2'), array(), '', false), $this->receivedParams);
     }
 
     public function testParamForwardingWithAdditionalParams() {
         $this->simpleMock('SomeClass')->expects('m1')->expects('m2')->create();
-        $this->assertEquals(array('SomeClass', array('m1', 'm2')), $this->receivedParams);
+        $this->assertEquals(array('SomeClass', array('m1', 'm2'), array(), '', false), $this->receivedParams);
     }
 
     public function testParamForwardingWithArbitaryAdditionalParams() {
