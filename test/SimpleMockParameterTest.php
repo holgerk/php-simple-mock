@@ -1,13 +1,13 @@
 <?php
 
-require_once __DIR__ . '/../lib/SimpleMock/TestCase.php';
+require_once __DIR__ . '/../src/SimpleMock/TestCase.php';
 
 class SimpleMockParameterTest extends SimpleMock_TestCase {
 
     protected $receivedParams = array();
 
     // overwrite/disable phpunit's default, so we can verify that all params forwarded
-    public function getMock() {
+    public function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = TRUE, $callOriginalClone = TRUE, $callAutoload = TRUE, $cloneArguments = FALSE) {
         $this->receivedParams = func_get_args();
         return call_user_func_array('parent::getMock', $this->receivedParams);
     }

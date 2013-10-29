@@ -11,7 +11,7 @@ test/ExampleTest.php
 ```php
 <?php
 
-require_once __DIR__ . '/../lib/SimpleMock/TestCase.php';
+require_once __DIR__ . '/../src/SimpleMock/TestCase.php';
 
 class ExampleTest extends SimpleMock_TestCase {
     // SimpleMock_TestCase extends PHPUnit_Framework_TestCase and adds the method: "simpleMock".
