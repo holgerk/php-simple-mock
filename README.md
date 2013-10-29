@@ -1,4 +1,4 @@
-php-simple-mock
+php-simple-mock [![Build Status](https://travis-ci.org/holgerk/php-simple-mock.png?branch=master)](https://travis-ci.org/holgerk/php-simple-mock)
 ===============
 
 Create PHPUnit Mocks without pain.
