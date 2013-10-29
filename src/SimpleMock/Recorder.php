@@ -12,7 +12,9 @@ class SimpleMock_Recorder {
         $this->args = array();
         $this->returns = array();
         $this->invocationNumber = 0;
-        $this->strict = false;
+
+        $this->strict = false; // strict mode - one can only mock what allready exists
+        $this->complete = false; // complete mode - one can only call what is mocked
 
         // TODO document this behaviour
         if (count($this->phpunitGetMockArguments) == 1) {
@@ -24,6 +26,11 @@ class SimpleMock_Recorder {
 
     public function strict() {
         $this->strict = true;
+        return $this;
+    }
+
+    public function complete() {
+        $this->complete = true;
         return $this;
     }
 
@@ -56,6 +63,8 @@ class SimpleMock_Recorder {
     }
 
     public function create() {
+        $this->handleCompleteMode();
+
         $simpleMock = $this->instantiateMock();
         foreach ($this->methods as $method) {
             $expectedInvocationCount = $this->expectedInvocationCount($method);
@@ -152,6 +161,20 @@ class SimpleMock_Recorder {
         }
         if (!in_array($methodName, get_class_methods($class))) {
             throw new Exception("Strict-Mode-Error: $class has no $methodName method!");
+        }
+    }
+
+    private function handleCompleteMode() {
+        if (!$this->complete) {
+            return;
+        }
+        $class = $this->phpunitGetMockArguments[0];
+        if (!class_exists($class)) {
+            throw new Exception("Complete-Mode-Error: $class does not exist!");
+        }
+        $notMockedMethods = array_diff(get_class_methods($class), $this->methods);
+        foreach ($notMockedMethods as $method) {
+            $this->expects($method)->never();
         }
     }
 }

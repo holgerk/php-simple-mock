@@ -3,8 +3,6 @@ php-simple-mock [![Build Status](https://travis-ci.org/holgerk/php-simple-mock.p
 
 Create PHPUnit Mocks without pain.
 
-Tested with: PHP 5.3.6 and PHPUnit 3.5.5
-
 
 <!-- INSERT: "test/ExampleTest.php" -->
 test/ExampleTest.php
@@ -140,8 +138,9 @@ class ExampleTest extends SimpleMock_TestCase {
 ```
 <!-- /INSERT -->
 
+
 Strict Mode
----
+-----------
 ```php
 class DemoClass {
     public function method1($param1) {}
@@ -153,6 +152,29 @@ $simpleMock = $this->simpleMock('DemoClass')
     ->expects('method3') // <- throws because method3 does not exist
     ->create();
 ```
+
+
+Complete Mode
+-------------
+```php
+class DemoClass {
+    public function method1($param1) {}
+    public function method2($param1) {}
+}
+$simpleMock = $this->simpleMock('DemoClass')
+    ->complete()        // <- add if you want to ensure that only mocked methods can be called
+    ->expects('method2')->returns(42)
+    ->create();
+$this->assertEquals(42, $simpleMock->method2()); // <- works because this method is mocked
+$simpleMock->method1(); // <- throws because this method is not explicitly mocked
+```
+
+
+Todos
+=====
+
+* Support stubbing
+
 
 Credits
 =======

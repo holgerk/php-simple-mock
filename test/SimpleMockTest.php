@@ -3,8 +3,8 @@
 require_once __DIR__ . '/../src/SimpleMock/TestCase.php';
 
 class DemoClass {
-    public function method1($param1) {}
-    public function method2($param1) {}
+    public function method1() {}
+    public function method2() {}
 }
 
 class SimpleMockTest extends SimpleMock_TestCase {
@@ -166,6 +166,20 @@ class SimpleMockTest extends SimpleMock_TestCase {
             ->expects('method2')
             ->expects('method3') // <- should throw because method3 does not exist
             ->create();
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_ExpectationFailedException
+     * @expectedExceptionMessage DemoClass::method1() was not expected to be called.
+     */
+    public function testCanOnlyOnlyCallMockedMethodsInCompleteMode() {
+        $simpleMock = $this->simpleMock('DemoClass')
+            ->complete()
+            ->expects('method2')->returns(42)
+            ->create();
+        $this->assertEquals(42, $simpleMock->method2());
+        $simpleMock->method1(); // <- throws because this method is not explicitly mocked
+        $this->verify($simpleMock);
     }
 
     // overwrite/disable phpunit's default verification, so we can test against it
