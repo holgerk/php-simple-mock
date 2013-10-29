@@ -2,6 +2,11 @@
 
 require_once __DIR__ . '/../src/SimpleMock/TestCase.php';
 
+class DemoClass {
+    public function method1($param1) {}
+    public function method2($param1) {}
+}
+
 class SimpleMockTest extends SimpleMock_TestCase {
 
     /**
@@ -151,6 +156,18 @@ class SimpleMockTest extends SimpleMock_TestCase {
         $this->verify($simpleMock);
     }
 
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Strict-Mode-Error: DemoClass has no method3 method!
+     */
+    public function testCanOnlyMockExistingsMethodsInStrictMode() {
+        $simpleMock = $this->simpleMock('DemoClass')
+            ->strict()
+            ->expects('method2')
+            ->expects('method3') // <- should throw because method3 does not exist
+            ->create();
+    }
+
     // overwrite/disable phpunit's default verification, so we can test against it
     protected function verifyMockObjects() {
     }
@@ -160,3 +177,5 @@ class SimpleMockTest extends SimpleMock_TestCase {
         $simpleMock->__phpunit_cleanup();
     }
 }
+
+

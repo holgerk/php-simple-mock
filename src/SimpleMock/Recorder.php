@@ -12,7 +12,9 @@ class SimpleMock_Recorder {
         $this->args = array();
         $this->returns = array();
         $this->invocationNumber = 0;
+        $this->strict = false;
 
+        // TODO document this behaviour
         if (count($this->phpunitGetMockArguments) == 1) {
             $this->phpunitGetMockArguments[] = array(); // constructor args
             $this->phpunitGetMockArguments[] = '';      // mock class name
@@ -20,7 +22,13 @@ class SimpleMock_Recorder {
         }
     }
 
+    public function strict() {
+        $this->strict = true;
+        return $this;
+    }
+
     public function expects($method) {
+        $this->checkStrict($method);
         $this->methods[] = $method;
         return $this;
     }
@@ -133,4 +141,18 @@ class SimpleMock_Recorder {
             }
         }
     }
+
+    private function checkStrict($methodName) {
+        if (!$this->strict) {
+            return;
+        }
+        $class = $this->phpunitGetMockArguments[0];
+        if (!class_exists($class)) {
+            throw new Exception("Strict-Mode-Error: $class does not exist!");
+        }
+        if (!in_array($methodName, get_class_methods($class))) {
+            throw new Exception("Strict-Mode-Error: $class has no $methodName method!");
+        }
+    }
 }
+
