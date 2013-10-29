@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# <!-- INSERT: "tests/ExampleTest.php" -->
+# <!-- INSERT: "test/ExampleTest.php" -->
 # <!-- /INSERT -->
 readme = 'README.md'
 insert_rgx = /(<!-- INSERT: "([^"]+)" -->).*?(<!-- \/INSERT -->)/m
